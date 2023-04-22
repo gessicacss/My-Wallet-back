@@ -18,7 +18,7 @@ My Wallet API is a financial management tool developed with Node.js and MongoDB.
 
 #### <span style='font-weight:bold;'>POST</span> /signUp
 
-A route register a new user. If there's a participant with this e-mail already registered, it'll return a 409 status code error. If its sucessfull you'll get a 201 status code. The request body should be:
+A route that creates a new user account. If there's a participant with this e-mail already registered, it returns a 409 status code error. If its sucessfull it returns a 201 status code. The request body should contain:
 
 ```
 {
@@ -32,7 +32,7 @@ A route register a new user. If there's a participant with this e-mail already r
 
 #### <span style='font-weight:bold;'>POST</span> /signIn
 
-A route that will allow the user to logIn, if there's no user with the given e-mail registered it'll return a 404 status code error, if the password doesn't match with the ones given on signUp, it'll return a 401 status code error. It'll give a token as a response.
+A route that will allow the user to sign in. If there's no user with the given e-mail registered it'll return a 404 status code error, if the password doesn't match with the ones given on signUp, it'll return a 401 status code error. It'll give a token as a response.
 
 All routes after signIn will need an authentication token:
 ```
@@ -41,7 +41,7 @@ headers: { Authorization: `Bearer ${token}` }
 
 #### <span style='font-weight:bold;'>POST</span> /transactions
 
-A request to create a new expense or incoming. All the fields are required and can't be empty. The token should come as a header. If any of the fields are missing or empty, the API will respond with a 422 status code and an error message indicating that all the fields are required and shouldn't be empty. It'll return a 401 status code if the token doesn't exist or if there's no account with this token.
+Creates a new income or expense transaction. All fields are required and cannot be empty. The request should include a token as a header. If any of the fields are missing or empty, the API returns a 422 status code error and an error message indicating that all fields are required and cannot be empty. It returns a 401 status code if the token doesn't exist or if there's no account with this token. The request body should contain the following:
 
 ```
 The request body should be:
@@ -51,12 +51,12 @@ The request body should be:
         "amount": 1200
         }
     }
-    In case its a number like 1200, which means: it ends with two zeroes, don't put a dot between, otherwise it'll look like this: "amount": 1.2, it'll work if the number only has one zero or if its a floating number. (like 275.5)
+Note that if the amount is a whole number that ends with two zeros (e.g., 1200), do not include a decimal point. Otherwise, if it is a floating-point number or has one zero at the end (e.g., 275.5), include the decimal point.
 ```
 
 #### <span style='font-weight:bold;'>GET</span> /transactions
 
-A request that will retrieve a list of this users expense or incoming in the chat. If there are no financial information, it'll return an empty array. The response will come like this:
+Retrieves a list of the user's income and expense transactions. If there are no transactions, it returns an empty array. The response body looks like this:
 
 ```
 The date format is: (DD/MM)
@@ -64,7 +64,7 @@ The date format is: (DD/MM)
     {
         "_id": "644438f94af2cf105bd042b5",
         "userId": "64443438f3722b44d6394f74",
-        "description": "salario",
+        "description": "salário",
         "type": "entrada",
         "amount": 1200.89,
         "date": "21/04"
@@ -73,7 +73,7 @@ The date format is: (DD/MM)
         "_id": "644439144af2cf105bd042b6",
         "userId": "64443438f3722b44d6394f74",
         "description": "conta de luz",
-        "type": "saida",
+        "type": "saída",
         "amount": 170.5,
         "date": "22/04"
     }
