@@ -6,7 +6,7 @@ import postTransactionsSchema from "../schemas/postTransactionsSchema.js";
 
 const userRouter = Router();
 userRouter.use(authValidation);
-userRouter.post("/post-transactions/:type", validateSchema(postTransactionsSchema), postTransactions);
-userRouter.get("/post-transactions/", getTransactions);
+userRouter.post("/transactions/:type", validateSchema(postTransactionsSchema), postTransactions);
+userRouter.get("/transactions/", getTransactions);
 
 export default userRouter;
