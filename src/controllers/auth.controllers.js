@@ -1,18 +1,11 @@
-import db from "../app.js";
-import signInSchema from "../schemas/signInSchema.js";
-import signUpSchema from "../schemas/signUpSchema.js";
+import db from "../database/database.connection.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
 export async function signUp(req, res) {
   const { name, email, password } = req.body;
-  const validation = signUpSchema.validate(req.body);
   const hashPassword = bcrypt.hashSync(password, 10);
   try {
-    if (validation.error) {
-      return res.status(422).send(validation.error.message);
-    }
-
     const user = await db.collection("users").findOne({ email });
     if (user) {
       return res.status(409).send("User already exists");
@@ -28,12 +21,7 @@ export async function signUp(req, res) {
 
 export async function signIn(req, res) {
   const { email, password } = req.body;
-  const validation = signInSchema.validate(req.body);
   try {
-    if (validation.error) {
-      return res.status(422).send(validation.error.message);
-    }
-
     const user = await db.collection("users").findOne({ email });
     if (!user){
         return res.sendStatus(404);
