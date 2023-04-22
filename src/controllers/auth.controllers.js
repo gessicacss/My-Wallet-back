@@ -4,7 +4,8 @@ import { v4 as uuid } from "uuid";
 
 export async function signUp(req, res) {
   const { name, email, password } = req.body;
-  const hashPassword = bcrypt.hashSync(password, 10);
+  const saltRounds = 10;
+  const hashPassword = bcrypt.hashSync(password, saltRounds);
   try {
     const user = await db.collection("users").findOne({ email });
     if (user) {
