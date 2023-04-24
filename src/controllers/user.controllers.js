@@ -7,6 +7,7 @@ export async function postTransactions(req, res){
     const {type} = req.params;
     const date = formatDate();
     const {userId} = res.locals.session;
+    if (type !== "saida" && type !== "entrada") return res.status(422).send("Esse tipo é inválido");
     try {
         await db.collection('transactions').insertOne({userId, description, type, amount, date })
         res.sendStatus(201);
