@@ -1,5 +1,4 @@
 import db from "../database/database.connection.js";
-import bcrypt from "bcrypt";
 import formatDate from "../utils/formatDate.js";
 
 export async function postTransactions(req, res){
@@ -22,6 +21,21 @@ export async function getTransactions(req, res){
         const transactions = await db.collection('transactions').find({userId}).toArray();
         res.send(transactions);
     } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
+export async function deleteTransaction(req, res){
+    const { id } = req.params;
+
+    try {
+        const transaction = await db.collection('transactions').findOne({_id: new ObjectId(id)});
+        if (!transaction){
+            return res.status(404).send("There's no transaction with this id!");
+        }
+        await db.collection('transactions').deleteOne({_id: new ObjectId(id)});
+        res.sendStatus(202);
+    } catch(err){
         res.status(500).send(err.message);
     }
 }
